@@ -46,11 +46,94 @@ footer {
   justify-content: center; /*flex된 item들을 수평기준 가운데 정렬*/
   gap: 20px; /*item들 간의 간격*/
 }
+footer a {
+  margin: 0px 10px;
+  text-decoration: none; /*text밑에 밑줄 제거*/
+  color: gray;
+}
+footer a:focus, a:hover {
+  color: black;
+}
+
+/* post navigation 작업 */
+.post__navigation {
+  display: flex; /*양옆으로 흐르도록*/
+  gap: 12px;
+  margin: 0 auto;
+  max-width: 680px;
+  font-size: 16px;
+  color: gray;
+  cursor: pointer;
+  padding: 48px 20px 0px 20px;
+}
+
+.post__navigation--active {
+  color: black;
+  font-weight: 600; /*굵게*/
+}
 
 /* post list 작업 */
-.post-list {
+.post__list {
   /* vh경우 뷰포트 기준으로 90%를 준다는 뜻 */
   min-height: 90vh;
-  padding: 20px 40px;
+  padding: 20px;
   text-align: center;
+  max-width: 680px;
+  margin: 0 auto; /*auto를 이용하면 가운데 정렬. padding은 auto값 선언 불가*/
+  text-align: left;
+  line-height: 24px; /*글씨라인이 다닥다닥 붙어있음을 방지하기 위해*/
+}
+.post__list a {
+  text-decoration: none;
+  color: black;
+}
+
+.post__box {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-top: 1px solid #f2f2f2;
+}
+
+.post__profile-box {
+  display: flex; /*양옆으로 흐르도록*/
+  gap: 8px;
+  font-size: 14px; /*폰트사이즈 조금 줄이기*/
+  align-items: center;
+}
+.post__profile {
+  width: 36px;
+  height: 36px;
+  background: #f2f2f2;
+  border-radius: 50%; /*50%로 주면 원형이 됨*/
+}
+.post__author-name, 
+.post__date {
+  color: gray;
+}
+
+.post__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 14px 0px;
+}
+
+.post__text {
+  color: dimgray;
+  font-size: 16px;
+}
+
+.post__utils-box {
+  display: flex; /*양옆으로 흐르도록*/
+  gap: 8px;
+  flex-direction: row-reverse; /*오른쪽으로 갈 수 있도록*/
+  font-size: 14px;
+  color: gray;
+}
+.post__delete:hover, 
+.post__delete:focus {
+  color: black;
+}
+.post__edit:hover, 
+.post__edit:focus {
+  color: black;
 }
