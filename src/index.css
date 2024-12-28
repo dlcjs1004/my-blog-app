@@ -16,11 +16,17 @@ code {
 header {
   display: flex;
   justify-content: space-between;
-  flex-direction: row-reverse;
+  /* flex-direction: row-reverse; */
   border-bottom: 1px solid #f2f2f2;
   padding: 10px 40px; /*위 아래 10px, 양 옆 40px*/
   min-height: 40px; /*반응성에서도 중요한데, 화면이 작아짐에 따라 DOM이 해당 사이즈에 맞춰 작아져도, min 설정을 통해 최소한의 길이, 높이를 보증*/
   align-items: center; /*item들이 가운데에 있도록*/
+}
+
+header .header__logo {
+  color: black;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 /* header안에 있는 것들은 link(a태그)이므로 */
@@ -72,8 +78,9 @@ footer a:focus, a:hover {
   font-weight: 600; /*굵게*/
 }
 
-/* post list 작업 */
-.post__list {
+/* post list 작업 & post detail 틀 작업 */
+.post__list, 
+.post__detail {
   /* vh경우 뷰포트 기준으로 90%를 준다는 뜻 */
   min-height: 90vh;
   padding: 20px;
@@ -135,5 +142,71 @@ footer a:focus, a:hover {
 }
 .post__edit:hover, 
 .post__edit:focus {
+  color: black;
+}
+
+/* post detail 작업 */
+.post__detail .post__title {
+  font-size: 36px;
+  line-height: 40px;
+}
+
+.post__detail .post__utils-box {
+  padding: 10px 0px;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  flex-direction: row;
+}
+
+.post__detail .post__profile-box {
+  padding: 10px 0px;
+}
+
+.post__detail .post__text {
+  padding: 20px 0px;
+}
+
+/* profile 작업 */
+.profile__box {
+  display : flex;
+  gap: 19px;
+  align-items: center;
+  font-size: 18px;
+  margin: 0 auto;
+  max-width: 680px;
+  text-align: left;
+  line-height: 24px;
+  justify-content: space-between; /*item들이 서로 떨어져 있도록*/
+  padding: 20px;
+}
+
+.flex__box-lg {
+  display: flex;
+  gap: 18px;
+  align-items: center; /*수직 가운데 정렬*/
+}
+
+.profile__image {
+  width: 72px;
+  height: 72px;
+  background-color: #f2f2f2;
+  border-radius: 50%;
+}
+
+.profile__name {
+  font-size: 16px;
+  padding-top: 4px;
+}
+
+.profile__email {
+  font-weight: 500;
+}
+
+.profile__logout {
+  color: gray;
+  font-size: 14px;
+}
+.profile__logout:hover,
+.profile__logout:focus {
   color: black;
 }
