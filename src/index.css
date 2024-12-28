@@ -11,3 +11,46 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* header 작업 */
+header {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  border-bottom: 1px solid #f2f2f2;
+  padding: 10px 40px; /*위 아래 10px, 양 옆 40px*/
+  min-height: 40px; /*반응성에서도 중요한데, 화면이 작아짐에 따라 DOM이 해당 사이즈에 맞춰 작아져도, min 설정을 통해 최소한의 길이, 높이를 보증*/
+  align-items: center; /*item들이 가운데에 있도록*/
+}
+
+/* header안에 있는 것들은 link(a태그)이므로 */
+header a {
+  margin: 0px 10px;
+  text-decoration: none; /*text밑에 밑줄 제거*/
+  color: gray;
+}
+
+header a:focus, a:hover {
+  color: black;
+}
+
+/* footer 작업 */
+footer {
+  background-color: #f2f2f2;
+  min-height: 40px;
+  padding: 20px 40px;
+  font-size: 14px;
+  text-align: center;
+  display: flex; /*flex의 기본 방향은 수평이기 때문에 수평으로 만들 수 있음*/
+  align-items: center; /*flex된 item들을 수직기준 가운데 정렬*/
+  justify-content: center; /*flex된 item들을 수평기준 가운데 정렬*/
+  gap: 20px; /*item들 간의 간격*/
+}
+
+/* post list 작업 */
+.post-list {
+  /* vh경우 뷰포트 기준으로 90%를 준다는 뜻 */
+  min-height: 90vh;
+  padding: 20px 40px;
+  text-align: center;
+}
