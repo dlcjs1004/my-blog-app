@@ -216,6 +216,7 @@ footer a:focus, a:hover {
   margin: 0 auto;
   max-width: 980px;
   margin-top: 36px;
+  padding: 40px;
 }
 
 ul.carousel__slides {
