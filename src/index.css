@@ -211,7 +211,7 @@ footer a:focus, a:hover {
   color: black;
 }
 
-/* carousel 작업 */
+/* carousel 작업(메인페이지 롤링) */
 .carousel {
   margin: 0 auto;
   max-width: 980px;
