@@ -1,4 +1,4 @@
-import { useState } from "react";
+//import { useState } from "react";
 
 import {Route, Routes, Navigate} from "react-router-dom";
 import Home from "pages/home";
@@ -10,10 +10,14 @@ import ProfilePage from "pages/profile"
 import LoginPage from "pages/login";
 import SignupPage from "pages/signup";
 
+// 타입 선언
+interface RouterProps {
+    isAuthenticated: boolean;
+}
 
-export default function Router() {
-    //firebase Auth가 인증되었으면 true로 변경해주는 로직 추가
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); //기본적으로 사용자 인증이 안되었다고 가정하기 때문에 false로 두기
+export default function Router({ isAuthenticated }:RouterProps) {
+    
+    
     return (
     <>
         <Routes>
