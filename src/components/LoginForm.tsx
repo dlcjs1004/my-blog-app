@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { app } from "firebaseApp";
@@ -9,6 +9,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
   const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // e.preventDefault()를 통해 기본 동작을 하지 않도록 작업
@@ -18,6 +19,7 @@ export default function LoginForm() {
       await signInWithEmailAndPassword(auth, email, password);
 
       toast.success("로그인에 성공했습니다.");
+      navigate("/");
     } catch (error: any) {
       toast.error(error?.code);
       console.log(error);
