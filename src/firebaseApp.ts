@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, FirebaseApp, getApp } from "firebase/app";
 import "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 export let app: FirebaseApp; //app을 지역변수로 선언
 
@@ -22,5 +23,9 @@ try {
 
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+//다른 페이지에서 사용할 수 있도록 export
+export const db = getFirestore(app);
 
 export default firebase;
