@@ -186,6 +186,11 @@ footer a:focus, a:hover {
   padding: 20px 0px;
 }
 
+
+.post__text--pre-wrap { /* post__text가 줄바꿈이 처리가 안될 경우를 대비하여 */
+  white-space: pre-wrap; /*줄바꿈을 적용하되, 영역밖으로 벗어나지 않도록*/
+}
+
 /* profile 작업 */
 .profile__box {
   display : flex;

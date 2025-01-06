@@ -10,8 +10,8 @@ interface PostListProps {
 
 type TabType = "all" | "my"; //TabType 정의(전체/나의 글)
 
-interface PostProps {
-  id: string;
+export interface PostProps {
+  id?: string;
   title: string;
   email: string;
   summary: string;
@@ -67,7 +67,7 @@ export default function PostList({hasNavigation = true}: PostListProps) {
               <div className="post__date">{post?.createAt}</div>
             </div>
             <div className="post__title">{post?.title}</div>
-            <div className="post__text">{post.content}</div>
+            <div className="post__text">{post.summary}</div>
           </Link>
 
 {/* post의 email과 user의 email이 같을 경우에만 보여주기 */}
