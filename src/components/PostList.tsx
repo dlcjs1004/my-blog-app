@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "firebaseApp";
 import AuthContext from "context/AuthContext";
 import { toast } from "react-toastify";
 
 interface PostListProps {
   hasNavigation?: boolean;
+  defaultTab?: TabType;
 }
 
 type TabType = "all" | "my"; //TabType 정의(전체/나의 글)
@@ -17,19 +18,37 @@ export interface PostProps {
   email: string;
   summary: string;
   content: string;
-  createAt: string;
+  createdAt: string;
   updatedAt?: string;
   uid: string;
 }
 
-export default function PostList({hasNavigation = true}: PostListProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("all"); //기본은 "전체"
+export default function PostList({
+  hasNavigation = true,
+  defaultTab = "all",
+}: PostListProps) {
+  const [activeTab, setActiveTab] = useState<TabType>(defaultTab); //기본은 "전체"
   const [posts, setPosts] = useState<PostProps[]>([]);
   const { user } = useContext(AuthContext);
 
   const getPosts = async () => {
-    const datas = await getDocs(collection(db, "posts"));
     setPosts([]); //posts 초기화 (중복쌓임 방지차원)
+    // post 생성순대로 정렬
+    let postsRef = collection(db, "posts");
+    let postsQeury;
+    
+    //activeTab 관련
+    if (activeTab === "my" && user) { //나의 글만 필터링
+      postsQeury = query(
+          postsRef, 
+          where("uid", "==", user.uid),
+          orderBy("createdAt", "desc")
+        );
+    } else { // 모든 글 보여주기
+      postsQeury = query(postsRef, orderBy("createdAt", "desc"));
+    }
+
+    const datas = await getDocs(postsQeury);
     datas?.forEach((doc) => {
       //console.log(doc.data(), doc.id);
       const dataObj = {...doc.data(), id: doc.id}; //doc의 데이터를 모두 가져오고, id는 doc의 id로 따로 합치기
@@ -40,7 +59,8 @@ export default function PostList({hasNavigation = true}: PostListProps) {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]); //activeTab이 변할 때마다 getPosts() 호출
 
   const handleDelete = async (id:string) => {
     const confirm = window.confirm("해당 게시글을 삭제하시겠습니까?");
@@ -77,7 +97,7 @@ export default function PostList({hasNavigation = true}: PostListProps) {
             <div className="post__profile-box">
               <div className="post__profile" />
               <div className="post__author-name">{post?.email}</div>
-              <div className="post__date">{post?.createAt}</div>
+              <div className="post__date">{post?.createdAt}</div>
             </div>
             <div className="post__title">{post?.title}</div>
             <div className="post__text">{post.summary}</div>

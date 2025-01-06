@@ -46,7 +46,7 @@ export default function PostDetail() {
       <div className="post__profile-box">
         <div className="post__profile" />
         <div className="post__author-name">{post?.email}</div>
-        <div className="post__date">{post?.createAt}</div>
+        <div className="post__date">{post?.createdAt}</div>
       </div>
       <div className="post__utils-box">
         <div 
