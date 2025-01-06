@@ -49,6 +49,10 @@ export default function PostDetail() {
         <div className="post__date">{post?.createdAt}</div>
       </div>
       <div className="post__utils-box">
+        {/* category가 있는 경우에만 category 나타내기 */}
+        {post?.category && (
+          <div className="post__category">{post?.category}</div>
+        )}
         <div 
           className="post__delete"
           role="presentation"
