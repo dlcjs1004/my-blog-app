@@ -1,32 +1,75 @@
-import { useContext, useState } from "react";
-import { collection, addDoc } from "firebase/firestore"; 
+import { useContext, useEffect, useState } from "react";
+import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore"; 
 import { db } from "firebaseApp";
 import AuthContext from "context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { PostProps } from "./PostList";
 
 export default function PostForm() {
+  const params = useParams(); //post id값을 추출
+  const [post, setPost] = useState<PostProps | null>(null);
   const [title, setTitle] = useState<string>("");
   const [summary, setSummary] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+   //getPost는 id값을 받도록 하기
+    const getPost = async (id: string) => {
+      if(id) { //id가 있다면
+        const docRef = doc(db, "posts", id);
+        const docSnap = await getDoc(docRef);
+        //console.log(docSnap?.data());
+  
+        setPost({ id: docSnap.id, ...(docSnap.data() as PostProps) });
+      }
+    };
+  
+    //console.log(post);
+  
+    useEffect(() => {
+      if (params?.id) getPost(params?.id); //params의 id가 있는 경우에만 getPost()를 호출하도록 하기
+    }, [params?.id])
+
+    //useEffect를 통해 만약 수정해야 할 데이터가 있으면 Form field에 넣어주도록 하기
+    useEffect(() => {
+      if (post) { //만약 post값이 있다면 (즉 수정을 위한 폼이라면)
+        setTitle(post?.title)
+        setSummary(post?.summary)
+        setContent(post?.content)
+      }
+    }, [post]) //dependency Array에 Post를 추가
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      //firestore로 데이터 생성하는 로직
-      await addDoc(collection(db, "posts"), {
-        title: title,
-        summary: summary,
-        content: content,
-        createAt: new Date()?.toLocaleDateString(),
-        email: user?.email,
-      });
+      if (post && post?.id) { // firestore로 데이터 수정 (post 데이터가 있다면)
+        const postRef = doc(db, "posts", post?.id);
+        await updateDoc(postRef, {
+          title: title,
+          summary: summary,
+          content: content,
+          updatedAt: new Date()?.toLocaleDateString(),
+        });
 
-      toast?.success("게시글을 생성했습니다.");
-      navigate("/");
+        toast?.success("게시글을 수정했습니다.");
+        navigate(`/posts/${post.id}`);
+
+      } else { //firestore로 데이터 생성하는 로직
+        await addDoc(collection(db, "posts"), {
+          title: title,
+          summary: summary,
+          content: content,
+          createAt: new Date()?.toLocaleDateString(),
+          email: user?.email,
+          uid: user?.uid,
+        });
+  
+        toast?.success("게시글을 생성했습니다.");
+        navigate("/");
+      }
     } catch(e: any) {
       console.log(e);
       toast?.error(e?.code);
@@ -73,7 +116,7 @@ export default function PostForm() {
       </div>
 
       <div className="form__block">
-        <input type="submit" value="제출" className="form__btn--submit" />
+        <input type="submit" value={post? '수정' : '제출'} className="form__btn--submit" />
       </div>
     </form>
   );
