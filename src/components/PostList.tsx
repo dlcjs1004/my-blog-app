@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "firebaseApp";
+import AuthContext from "context/AuthContext";
 
 interface PostListProps {
   hasNavigation?: boolean;
@@ -7,8 +10,34 @@ interface PostListProps {
 
 type TabType = "all" | "my"; //TabType 정의(전체/나의 글)
 
+interface PostProps {
+  id: string;
+  title: string;
+  email: string;
+  summary: string;
+  content: string;
+  createAt: string;
+}
+
 export default function PostList({hasNavigation = true}: PostListProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all"); //기본은 "전체"
+  const [posts, setPosts] = useState<PostProps[]>([]);
+  const { user } = useContext(AuthContext);
+
+  const getPosts = async () => {
+    const datas = await getDocs(collection(db, "posts"));
+    datas?.forEach((doc) => {
+      //console.log(doc.data(), doc.id);
+      const dataObj = {...doc.data(), id:doc.id}; //doc의 데이터를 모두 가져오고, id는 doc의 id로 따로 합치기
+      setPosts((prev) => [...prev, dataObj as PostProps]); //이전 데이터 Prev를 추가하고, 그 다음에 dataObj를 마지막에 추가하는 방식
+      //setPosts(dataObj);라고 썼으면 마지막 dataObj만 끌어옴
+    });
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <>
     {hasNavigation && (
@@ -29,25 +58,32 @@ export default function PostList({hasNavigation = true}: PostListProps) {
     )}
 
     <div className="post__list">
-      {[...Array(10)].map((e, index) => (
-        <div key={index} className="post__box">
-          <Link to={`/posts/${index}`}>
+      {posts?.length > 0 ? posts?.map((post, index) => ( //posts의 length가 0보다 클 때 posts 매핑
+        <div key={post?.id} className="post__box">
+          <Link to={`/posts/${post?.id}`}>
             <div className="post__profile-box">
               <div className="post__profile" />
-              <div className="post__author-name">이윤서</div>
-              <div className="post__date">2024.12.28 토요일</div>
+              <div className="post__author-name">{post?.email}</div>
+              <div className="post__date">{post?.createAt}</div>
             </div>
-            <div className="post__title">게시글 {index}</div>
-            <div className="post__text">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </div>
-            <div className="post__utils-box">
-              <div className="post__delete">삭제</div>
-              <div className="post__edit">수정</div>
-            </div>
+            <div className="post__title">{post?.title}</div>
+            <div className="post__text">{post.content}</div>
           </Link>
+
+{/* post의 email과 user의 email이 같을 경우에만 보여주기 */}
+            {post?.email === user?.email && (
+              <div className="post__utils-box">
+                <div className="post__delete">삭제</div>
+                  <Link to={`/posts/edit/${post?.id}`} className="post__edit">
+                    수정
+                  </Link>
+            </div>
+            )}
+            
         </div>  
-      ))}
+      )) : (
+        <div className="post__no-post">게시글이 없습니다.</div>
+      ) }
     </div>
     </>
   );
