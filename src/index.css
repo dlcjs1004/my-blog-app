@@ -61,6 +61,12 @@ footer a:focus, a:hover {
   color: black;
 }
 
+.footer__theme-btn {
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+}
+
 /* post navigation 작업 */
 .post__navigation {
   display: flex; /*양옆으로 흐르도록*/
@@ -483,4 +489,57 @@ input:checked + .carousel__slide-container .nav label {
   border-radius: 50%;
   z-index: 9999; /*layer 가장 높게*/
   animation: rotation 1s linear infinite;
+}
+
+/* dark mode 작업  */
+/* white테마와 dark테마로 변경될 때마다 트랜지션이 되도록 트랜지션 추가 
+  *css에서 트랜지션은 웹 요소의 속성 변화를 부드럽게 만들어주는 css 속성 */
+.white {
+  transition: all 0.25s linear; /*0.25초동안 부드럽게 전환*/
+  background-color: white;
+}
+
+.dark {
+  transition: all 0.25s linear;
+  background-color: #1e2937;
+  min-height: 100vh;
+}
+
+.dark a,
+.dark .form label,
+.dark .post__delete,
+.dark .profile__logout,
+.dark .form__title,
+.dark .post__navigation--active,
+.dark .post__title,
+.dark .post__author-name,
+.dark .footer__theme-btn,
+.dark .profile__name {
+  color: white;
+}
+
+.dark a:hover,
+.dark a:focus,
+.dark .profile__logout:hover,
+.dark .profile__logout:focus,
+.dark .post__delete:hover,
+.dark .post__delete:focus{
+  color: lightgray;
+}
+
+.dark .post__text,
+.dark .post__text--pre-wrap,
+.dark .profile__email,
+.dark .post__date,
+.dark .form__block {
+  color: lightgray;
+}
+
+.dark .form__error {
+  color: #ff6a71;
+}
+
+.dark footer,
+.dark header {
+  background-color: #111827;
 }
