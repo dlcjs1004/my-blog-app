@@ -1,4 +1,9 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
+import { PostProps } from "./PostList";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import AuthContext from "context/AuthContext";
+import { toast } from "react-toastify";
+import { db } from "firebaseApp";
 
 const COMMENTS = [
   {
@@ -45,8 +50,14 @@ const COMMENTS = [
   },
 ];
 
-export default function Comments() {
+interface CommentsProps {
+  post: PostProps;
+}
+
+export default function Comments({ post }: CommentsProps) {
+  //console.log(post);
   const [comment, setComment] = useState("");
+  const {user} = useContext(AuthContext); //현 user 받아오기
   
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const {
@@ -58,10 +69,46 @@ export default function Comments() {
     }
   };
   
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      if (post && post?.id) { //post가 있고, post.id가 유효하다면
+        const postRef = doc(db, "posts", post.id);
+
+        if (user?.uid) {
+          const commentObj = {
+            content: comment,
+            uid: user.uid,
+            email: user.email,
+            createdAt: new Date()?.toLocaleDateString("ko", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            }),
+          };
+
+          await updateDoc(postRef, {
+            //comment는 배열 요소이므로 arrayUnion()으로 요소 추가
+            comment: arrayUnion(commentObj),
+            updatedAt: new Date()?.toLocaleDateString("ko", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            }),
+          });
+        }
+      }
+      toast.success("댓글을 생성했습니다.");
+      setComment(""); //comment 초기화
+    } catch (e: any) {
+      console.log(e);
+      toast.error(e?.code);
+    }
+  };
 
   return (
   <div className="comments">
-    <form className="comments__form">
+    <form className="comments__form" onSubmit={onSubmit}>
       <div className="form__block">
         <label htmlFor="comment">댓글 입력</label>
         <textarea 
