@@ -5,56 +5,12 @@ import AuthContext from "context/AuthContext";
 import { toast } from "react-toastify";
 import { db } from "firebaseApp";
 
-const COMMENTS = [
-  {
-    id: 1,
-    email: "test@test.com",
-    content: "댓글입니다 1",
-    createdAt: "2023-07-13",
-  },
-  {
-    id: 2,
-    email: "test@test.com",
-    content: "댓글입니다 2",
-    createdAt: "2023-07-13",
-  },
-  {
-    id: 3,
-    email: "test@test.com",
-    content: "댓글입니다 3",
-    createdAt: "2023-07-13",
-  },
-  {
-    id: 4,
-    email: "test@test.com",
-    content: "댓글입니다 4",
-    createdAt: "2023-07-13",
-  },
-  {
-    id: 5,
-    email: "test@test.com",
-    content: "댓글입니다 5",
-    createdAt: "2023-07-13",
-  },
-  {
-    id: 6,
-    email: "test@test.com",
-    content: "댓글입니다 6",
-    createdAt: "2023-07-13",
-  },
-  {
-    id: 7,
-    email: "test@test.com",
-    content: "댓글입니다 7",
-    createdAt: "2023-07-13",
-  },
-];
-
 interface CommentsProps {
   post: PostProps;
+  getPost: (id: string) => Promise<void>;
 }
 
-export default function Comments({ post }: CommentsProps) {
+export default function Comments({ post, getPost }: CommentsProps) {
   //console.log(post);
   const [comment, setComment] = useState("");
   const {user} = useContext(AuthContext); //현 user 받아오기
@@ -89,13 +45,15 @@ export default function Comments({ post }: CommentsProps) {
 
           await updateDoc(postRef, {
             //comment는 배열 요소이므로 arrayUnion()으로 요소 추가
-            comment: arrayUnion(commentObj),
+            comments: arrayUnion(commentObj),
             updatedAt: new Date()?.toLocaleDateString("ko", {
               hour: "2-digit",
               minute: "2-digit",
               second: "2-digit",
             }),
           });
+          //문서 업데이트!
+          await getPost(post.id);
         }
       }
       toast.success("댓글을 생성했습니다.");
@@ -125,15 +83,18 @@ export default function Comments({ post }: CommentsProps) {
     </form>
 
     <div className="comments_list">
-    {COMMENTS?.map((comment) => (
-      <div key={comment.id} className="comment_box">
-        <div className="comment__profile-box">
-          <div className="comment__email">{comment.email}</div>
-          <div className="comment__date">{comment.createdAt}</div>
-          <div className="comment__delete">삭제</div>
+    {post?.comments
+      ?.slice(0)
+      ?.reverse()
+      ?.map((comment) => (
+        <div key={comment.createdAt} className="comment_box">
+          <div className="comment__profile-box">
+            <div className="comment__email">{comment.email}</div>
+            <div className="comment__date">{comment.createdAt}</div>
+            <div className="comment__delete">삭제</div>
+          </div>
+          <div className="comment__text">{comment.content}</div>
         </div>
-        <div className="comment__text">{comment.content}</div>
-      </div>
     ))}
 
     </div>

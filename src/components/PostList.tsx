@@ -10,6 +10,14 @@ interface PostListProps {
   defaultTab?: TabType | CategoryType;
 }
 
+export interface CommentsInterface {
+  content: string;
+  uid: string;
+  email: string;
+  createdAt: string;
+}
+
+// comments?: 에서 물음표 붙이는 이유: optional이라는 의미
 export interface PostProps {
   id?: string;
   title: string;
@@ -20,7 +28,9 @@ export interface PostProps {
   updatedAt?: string;
   uid: string;
   category?: CategoryType;
+  comments?: CommentsInterface[];
 }
+
 type TabType = "all" | "my"; //TabType 정의(전체/나의 글)
 
 export type CategoryType = "자기소개" | "고민" | "커뮤니티" | "상담";
