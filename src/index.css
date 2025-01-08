@@ -491,12 +491,106 @@ input:checked + .carousel__slide-container .nav label {
   animation: rotation 1s linear infinite;
 }
 
+/* comments 작업 */
+.comments {
+  width: 100%;
+}
+
+.comments__form label {
+  font-weight: 600;
+  display: block; /*한 줄 다 차지*/
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.comments__form textarea {
+  min-height: 100px;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  border-radius: 0.3rem;
+  border: 1px solid lightgray;
+  display: block;
+  width: 100%;
+  max-width: 680px;
+}
+
+.comments__form .form__block {
+  margin-top: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.comments__form .form__btn-submit {
+  width: 100px;
+  height: 36px;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.form__block-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.comments__form .form__btn-submit:hover,
+.comments__form .form__btn-submit:focus {
+  background-color: #1945a4;
+}
+
+/* comments 작업 - comment list UI*/
+.comments_list {
+  margin-top: 40px;
+  margin-bottom: 100px;
+}
+
+.comment_box {
+  padding: 12px 0px;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.comment__profile-box {
+  display: flex; /*flex: 수평으로 넣기*/
+  gap: 10px;
+  font-size: 12px;
+}
+
+.comment__email {
+  font-weight: 500;
+}
+
+.comment__date {
+  color: gray;
+}
+
+.comment__delete {
+  color: gray;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.comment__delete:hover, 
+.comment__delete:focus {
+  color: black;
+}
+
+.comment__text {
+  font-size: 14px;
+  padding-top: 4px;
+}
+
 /* dark mode 작업  */
 /* white테마와 dark테마로 변경될 때마다 트랜지션이 되도록 트랜지션 추가 
   *css에서 트랜지션은 웹 요소의 속성 변화를 부드럽게 만들어주는 css 속성 */
 .white {
   transition: all 0.25s linear; /*0.25초동안 부드럽게 전환*/
   background-color: white;
+  align-items: center;
 }
 
 .dark {
@@ -514,7 +608,8 @@ input:checked + .carousel__slide-container .nav label {
 .dark .post__title,
 .dark .post__author-name,
 .dark .footer__theme-btn,
-.dark .profile__name {
+.dark .profile__name,
+.dark .comments_list {
   color: white;
 }
 
@@ -523,7 +618,7 @@ input:checked + .carousel__slide-container .nav label {
 .dark .profile__logout:hover,
 .dark .profile__logout:focus,
 .dark .post__delete:hover,
-.dark .post__delete:focus{
+.dark .post__delete:focus {
   color: lightgray;
 }
 
@@ -531,8 +626,15 @@ input:checked + .carousel__slide-container .nav label {
 .dark .post__text--pre-wrap,
 .dark .profile__email,
 .dark .post__date,
-.dark .form__block {
+.dark .form__block, 
+.dark .comment__date, 
+.dark .comment__delete {
   color: lightgray;
+}
+
+.dark .comment__delete:hover, 
+.dark .comment__delete:focus {
+  color: white;
 }
 
 .dark .form__error {

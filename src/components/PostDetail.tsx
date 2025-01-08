@@ -5,6 +5,7 @@ import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
+import Comments from "./Comments";
 
 export default function PostDetail() {
   const [post, setPost] = useState<PostProps | null>(null);
@@ -38,37 +39,42 @@ export default function PostDetail() {
     if (params?.id) getPost(params?.id); //params의 id가 있는 경우에만 getPost()를 호출하도록 하기
   }, [params?.id])
 
-  return <>
-  <div className="post__detail">
-    {post ? (
-      <div className="post__box">
-      <div className="post__title">{post?.title}</div>
-      <div className="post__profile-box">
-        <div className="post__profile" />
-        <div className="post__author-name">{post?.email}</div>
-        <div className="post__date">{post?.createdAt}</div>
-      </div>
-      <div className="post__utils-box">
-        {/* category가 있는 경우에만 category 나타내기 */}
-        {post?.category && (
-          <div className="post__category">{post?.category}</div>
-        )}
-        <div 
-          className="post__delete"
-          role="presentation"
-          onClick={handleDelete}
-        >
-          삭제
+  return (
+  <>
+    <div className="post__detail">
+      {post ? (
+        <>
+        <div className="post__box">
+        <div className="post__title">{post?.title}</div>
+        <div className="post__profile-box">
+          <div className="post__profile" />
+          <div className="post__author-name">{post?.email}</div>
+          <div className="post__date">{post?.createdAt}</div>
         </div>
-        <div className="post__edit">
-          <Link to={`/posts/edit/${post?.id}`}>수정</Link>
+        <div className="post__utils-box">
+          {/* category가 있는 경우에만 category 나타내기 */}
+          {post?.category && (
+            <div className="post__category">{post?.category}</div>
+          )}
+          <div 
+            className="post__delete"
+            role="presentation"
+            onClick={handleDelete}
+          >
+            삭제
+          </div>
+          <div className="post__edit">
+            <Link to={`/posts/edit/${post?.id}`}>수정</Link>
+          </div>
         </div>
+        <div className="post__text post__text--pre-wrap">{post?.content}</div>
       </div>
-      <div className="post__text post__text--pre-wrap">{post?.content}</div>
+      <Comments />
+      </>
+      ) : (
+        <Loader />
+      )}
     </div>
-    ) : (
-      <Loader />
-    )}
-  </div>
   </>
+  );
 }
